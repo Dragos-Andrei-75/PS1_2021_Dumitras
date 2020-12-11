@@ -56,7 +56,7 @@ void DHT11Method()
   lcd.print("Temp: ");
 }
 
-void printChar()
+void Time()
 {
   //display hours
   lcd.setCursor(6,0);
@@ -83,7 +83,18 @@ void printChar()
   lcd.print(s%10);
 }
 
-void Clock()
+void Temperature()
+{
+  float fahrenheit = dht.readTemperature(true);
+  float celsius = (fahrenheit - 32) * 5/9;
+
+  lcd.setCursor(6,1);
+  lcd.print(celsius);
+  lcd.setCursor(8,1);
+  lcd.print("C");
+}
+
+void Time_and_Temperature()
 {
   for(h = set_hour; h < 24; h++)//Hours
   {
@@ -91,7 +102,8 @@ void Clock()
     {
       for(s = set_second; s < 60; s++)//seconds
       {
-        printChar();
+        Time();
+        Temperature();
         delay(secs - (millis() % 1000));
       }
 
@@ -104,21 +116,7 @@ void Clock()
   set_hour = 00;  
 }
 
-void Temperature()
-{
-  float fahrenheit = dht.readTemperature(true);
-  float celsius = (fahrenheit - 32) * 5/9;
-
-  lcd.setCursor(6,1);
-  lcd.print(celsius);
-  lcd.setCursor(8,1);
-  lcd.print("C");
-
-  delay(1000);
-}
-
 void loop() 
 {
-  Clock();
-  Temperature();
+  Time_and_Temperature();
 }
